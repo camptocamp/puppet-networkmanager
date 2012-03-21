@@ -1,0 +1,21 @@
+<% require 'digest/md5' %>
+[connection]
+id=<%= name %>
+uuid=<%= Digest::MD5.hexdigest(name).to_s %>
+type=vpn
+permissions=user:<%= user %>:;
+autoconnect=<%= autoconnect %>
+
+[vpn]
+service-type=org.freedesktop.NetworkManager.openvpn
+ta-dir=<%= ta_dir %>
+connection-type=<%= connection_type %>
+password-flags=<%= password_flags %>
+remote=<%= remote %>
+comp-lzo=<%= comp_lzo %>
+username=<%= user %>
+ca=<%= ca %>
+ta=<%= ta %>
+
+[ipv4]
+method=<%= ipv4_method %>
