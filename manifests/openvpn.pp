@@ -19,6 +19,7 @@ Adds an openvpn VPN to NetworkManager
 
 Parameters:
 - *name*: the name of the VPN connection
+- *id*: the id of the VPN connection, defaults to name
 - *ensure* present/absent, defaults to present
 - *uuid*: the UUID of the connection
 - *user*: the user who can use the connection
@@ -44,6 +45,7 @@ TODO
 */
 define networkmanager::openvpn (
   $ensure=present,
+  $id='',
   $uuid,
   $user,
   $autoconnect=false,
@@ -58,6 +60,11 @@ define networkmanager::openvpn (
   $gconf_number
 ) {
 
+  $setid = $id ? {
+    ''      => $name,
+    default => $id,
+  }
+
   include networkmanager::openvpn::base
   include networkmanager::params
   $gconf_path=$networkmanager::params::gconf_path
@@ -68,7 +75,7 @@ define networkmanager::openvpn (
     gnome::gconf {
       "VPN id for ${name}":
         keyname => "${gconf_path}/${gconf_number}/connection/id",
-        type => 'string', value => $name, user => $user;
+        type => 'string', value => $setid, user => $user;
     
       "VPN name for ${name}":
         keyname => "${gconf_path}/${gconf_number}/connection/name",
