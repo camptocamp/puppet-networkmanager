@@ -1,0 +1,27 @@
+<% require 'digest/md5' %>
+[connection]
+id=<%= name %>
+uuid=<%= Digest::MD5.hexdigest(name).to_s %>
+type=802-11-wireless
+permissions=user:<%= user %>:;
+
+[802-11-wireless]
+ssid=<%= ssid %>
+mode=<%= mode %>
+security=<%= security %>
+
+[802-11-wireless-security]
+key-mgmt=<%= key_mgmt %>
+auth-alg=<%= auth_alg %>
+
+[ipv4]
+method=<%= ipv4_method %>
+
+[ipv6]
+method=<%= ipv6_method %>
+
+[802-1x]
+eap=<%= eap %>;
+identity=<%= user %>
+phase2-auth=<%= phase2_auth %>
+password-raw-flags=<%= password_raw_flags %>
