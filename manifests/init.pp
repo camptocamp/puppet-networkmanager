@@ -1,4 +1,4 @@
-class network-manager {
+class networkmanager {
   service { "network-manager":
     ensure  => running,
     require => Package["network-manager"],
