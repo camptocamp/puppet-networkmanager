@@ -19,6 +19,8 @@ Parameters:
 - *ta*: path to the TA key
 - *gconf_number*: set the connection number in gconf.
   This is only used for NM < $networkmanager::params::gconf_maxversion
+- *ipv4_method*: IPv4 method (defaults to auto)
+- *never_default*: do not use VPN connection as default route (defaults to true)
 
 Requires:
 - Class['networkmanager::openvpn::base']
@@ -43,7 +45,8 @@ define networkmanager::openvpn (
   $ensure=present,
   $id='',
   $autoconnect=false,
-  $ipv4_method=auto
+  $ipv4_method=auto,
+  $never_default=true
 ) {
 
   $setid = $id ? {
