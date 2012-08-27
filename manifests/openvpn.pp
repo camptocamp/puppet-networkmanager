@@ -46,7 +46,8 @@ define networkmanager::openvpn (
   $id='',
   $autoconnect='false',
   $ipv4_method='auto',
-  $never_default='true'
+  $never_default='true',
+  $routes=''
 ) {
 
   $setid = $id ? {
