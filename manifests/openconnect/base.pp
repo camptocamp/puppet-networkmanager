@@ -1,8 +1,6 @@
-/*
-== Class: networkmanager::openconnect::base
-
-Base class to install the openconnect support for NetworkManager
-*/
+#== Class: networkmanager::openconnect::base
+#
+#Base class to install the openconnect support for NetworkManager
 
 class networkmanager::openconnect::base {
   include networkmanager

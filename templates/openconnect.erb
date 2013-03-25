@@ -1,11 +1,10 @@
 <% require 'digest/md5' %>
 <% require 'base64' %>
 [connection]
-id=<%= setid %>
-uuid=<%= Digest::MD5.hexdigest(name).to_s %>
+id=<%= @setid %>
+uuid=<%= Digest::MD5.hexdigest(@name).to_s %>
 type=vpn
-permissions=user:<%= user %>:;
-autoconnect=<%= autoconnect %>
+autoconnect=<%= @autoconnect %>
 
 [vpn]
 service-type=org.freedesktop.NetworkManager.openconnect
@@ -18,14 +17,17 @@ autoconnect-flags=0
 enable_csd_trojan=no
 certsigs-flags=0
 cookie-flags=2
-gateway=<%= gateway %>
-authtype=<%= authtype %>
+gateway=<%= @gateway %>
+authtype=<%= @authtype %>
 
 [vpn-secrets]
-form:main:username=<%= user %>
-lasthost=<%= gateway %>
-xmlconfig=<%= Base64.encode64(xmlconfig).gsub("\n","\n+") %>
+form:main:username=<%= @user %>
+lasthost=<%= @gateway %>
+xmlconfig=<%= Base64.encode64(@xmlconfig).gsub(/\n/, '') %>
+
+[ipv6]
+method=<%= @ipv6_method %>
 
 [ipv4]
-method=<%= ipv4_method %>
-never-default=<%= never_default %>
+method=<%= @ipv4_method %>
+
