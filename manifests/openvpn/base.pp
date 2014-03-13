@@ -1,9 +1,7 @@
-/*
-== Class: networkmanager::openvpn::base
-
-Base class to install the openvpn support for NetworkManager
-*/
-
+# == Class: networkmanager::openvpn::base
+#
+# Base class to install the openvpn support for NetworkManager
+#
 class networkmanager::openvpn::base {
   include networkmanager
 

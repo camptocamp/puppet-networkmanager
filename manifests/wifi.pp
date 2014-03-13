@@ -1,42 +1,41 @@
-/*
-== Definition: networkmanager::wifi
-
-Adds an openvpn VPN to NetworkManager
-
-Parameters:
-- *name*: the name of the Wifi connection
-- *ensure* present/absent, defaults to present
-- *gconf_number*: set the connection number in gconf.
-  This is only used for NM <= $networkmanager::params::gconf_maxversion
-
-Requires:
-- Class["networkmanager::openvpn::base"]
-- gnome module with gnome::gconf
-
-Example usage:
-
-TODO
-
-*/
+# == Definition: networkmanager::wifi
+#
+# Adds an openvpn VPN to NetworkManager
+#
+# Parameters:
+# - *name*: the name of the Wifi connection
+# - *ensure* present/absent, defaults to present
+# - *gconf_number*: set the connection number in gconf.
+#   This is only used for NM <= $networkmanager::params::gconf_maxversion
+#
+# Requires:
+# - Class["networkmanager::openvpn::base"]
+# - gnome module with gnome::gconf
+#
+# Example usage:
+#
+# TODO
+#
 define networkmanager::wifi (
-  $uuid = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $user,
   $ssid,
   $eap,
   $phase2_auth,
   $gconf_number,
   $password_raw_flags,
-  $ensure=present,
-  $ssid_gconf='[]',
-  $mode=infrastructure,
-  $mac_address='',
-  $autoconnect=true,
-  $ipv4_method=auto,
-  $ipv6_method=auto,
-  $security=none,
-  $nma_ca_cert_ignore=false,
-  $key_mgmt=wpa-eap,
-  $auth_alg=open
+  $uuid               = regsubst(
+    md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
+  $ensure             = present,
+  $ssid_gconf         = '[]',
+  $mode               = infrastructure,
+  $mac_address        = '',
+  $autoconnect        = true,
+  $ipv4_method        = auto,
+  $ipv6_method        = auto,
+  $security           = none,
+  $nma_ca_cert_ignore = false,
+  $key_mgmt           = wpa-eap,
+  $auth_alg           = open,
 ) {
 
   include networkmanager::params
@@ -66,9 +65,10 @@ define networkmanager::wifi (
         value   => $security;
 
       "WIFI 802-11 . for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/802-11-wireless/ssid",
-        type    => 'list', list_type => 'int',
-        value   => $ssid_gconf;
+        keyname   => "${gconf_path}/${gconf_number}/802-11-wireless/ssid",
+        type      => 'list',
+        list_type => 'int',
+        value     => $ssid_gconf;
 
       "WIFI 802-11 key-mgmt for ${name}":
         keyname => "${gconf_path}/${gconf_number}/802-11-wireless-security/key-mgmt",
@@ -81,9 +81,10 @@ define networkmanager::wifi (
         value   => '802-11-wireless-security';
 
       "WIFI eap for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/802-1x/eap",
-        type    => 'list', list_type => 'string',
-        value   => "[${eap}]";
+        keyname   => "${gconf_path}/${gconf_number}/802-1x/eap",
+        type      => 'list',
+        list_type => 'string',
+        value     => "[${eap}]";
 
       "WIFI identity for ${name}":
         keyname => "${gconf_path}/${gconf_number}/802-1x/identity",
