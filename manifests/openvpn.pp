@@ -44,9 +44,9 @@ define networkmanager::openvpn (
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure        = 'present',
   $id            = '',
-  $autoconnect   = 'false',
+  $autoconnect   = false,
   $ipv4_method   = 'auto',
-  $never_default = 'true',
+  $never_default = true,
   $routes        = '',
 ) {
 
