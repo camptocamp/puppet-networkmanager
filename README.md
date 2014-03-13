@@ -191,6 +191,7 @@ IPv6 method. Defaults to `auto`.
 The ssid of the connection.
 
 ####`user`
+The user who can use the connection.
 
 ####`uuid`
 The UUID of the connection. Default to MD5 of `name`.
