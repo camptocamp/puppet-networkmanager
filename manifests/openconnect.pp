@@ -36,110 +36,24 @@ define networkmanager::openconnect (
   $uuid          = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure        = 'present',
-  $id            = '',
+  $id            = $name,
   $autoconnect   = false,
   $ipv4_method   = 'auto',
   $ipv6_method   = 'auto',
   $never_default = true,
 ) {
 
-  $setid = $id ? {
-    ''      => $name,
-    default => $id,
-  }
+  Class['networkmanager::install'] -> Networkmanager::Openconnect[$title]
 
-  include networkmanager::openconnect::base
-  include networkmanager::params
-  $gconf_path=$networkmanager::params::gconf_path
-  $gconf_maxversion=$networkmanager::params::gconf_maxversion
+  ensure_resource(
+    'package', 'network-manager-openconnect', { ensure => present, }
+  )
 
-  Gnome::Gconf {
-    user => $user,
-  }
-
-  # NetworkManager stopped using GConf, in what version exactly ?
-  if (versioncmp($::networkmanager_version, $gconf_maxversion) <= 0) {
-    gnome::gconf {
-      "VPN id for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/connection/id",
-        type    => 'string',
-        value   => $setid;
-
-      "VPN name for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/connection/name",
-        type    => 'string',
-        value   => 'connection';
-
-      "VPN type for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/connection/type",
-        type    => 'string',
-        value   => 'vpn';
-
-      "VPN remote for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/gateway",
-        type    => 'string',
-        value   => $gateway;
-
-      "VPN service-type for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/service-type",
-        type    => 'string',
-        value   => 'org.freedesktop.NetworkManager.openconnect';
-
-      "VPN username for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/username",
-        type    => 'string',
-        value   => $user;
-
-      "VPN xmlconfig for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/xmlconfig",
-        type    => 'string',
-        value   => $xmlconfig;
-
-      "VPN lasthost for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/lasthost",
-        type    => 'string',
-        value   => $gateway;
-
-      "VPN authtype for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/vpn/authtype",
-        type    => 'string',
-        value   => $authtype;
-
-      "VPN addresses for ${name}":
-        keyname   => "${gconf_path}/${gconf_number}/ipv4/addresses",
-        type      => 'list',
-        list_type => 'int',
-        value     => '[]';
-
-      "VPN dns for ${name}":
-        keyname   => "${gconf_path}/${gconf_number}/ipv4/dns",
-        type      => 'list',
-        list_type => 'int',
-        value     => '[]';
-
-      "VPN method for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/ipv4/method",
-        type    => 'string',
-        value   => $ipv4_method;
-
-      "VPN name2 for ${name}":
-        keyname => "${gconf_path}/${gconf_number}/ipv4/name",
-        type    => 'string',
-        value   => 'ipv4';
-
-      "VPN routes for ${name}":
-        keyname   => "${gconf_path}/${gconf_number}/ipv4/routes",
-        type      => 'list',
-        list_type => 'int',
-        value     => '[]';
-    }
-  } else {
-    file { "/etc/NetworkManager/system-connections/${name}":
-      ensure  => $ensure,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0600',
-      content => template('networkmanager/openconnect.erb'),
-    }
+  file { "/etc/NetworkManager/system-connections/${name}":
+    ensure  => $ensure,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => template('networkmanager/openconnect.erb'),
   }
 }
