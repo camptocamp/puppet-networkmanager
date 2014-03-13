@@ -32,7 +32,7 @@ TODO
 
 */
 define networkmanager::openvpn (
-  $uuid,
+  $uuid = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $user,
   $ta_dir,
   $connection_type,

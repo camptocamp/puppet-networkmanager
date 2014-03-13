@@ -1,7 +1,7 @@
 <% require 'digest/md5' %>
 [connection]
 id=<%= @setid %>
-uuid=<%= Digest::MD5.hexdigest(@name).to_s %>
+uuid=<%= @uuid %>
 type=vpn
 permissions=user:<%= @user %>:;
 autoconnect=<%= @autoconnect %>
