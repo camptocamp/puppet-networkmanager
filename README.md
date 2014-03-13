@@ -188,8 +188,10 @@ IPv6 method. Defaults to `auto`.
 ####`security`
 
 ####`ssid`
+The ssid of the connection.
 
 ####`user`
 
 ####`uuid`
+The UUID of the connection. Default to MD5 of `name`.
 
