@@ -1,0 +1,7 @@
+name         'camptocamp-networkmanager'
+version      '0.1.0'
+dependency   'puppetlabs/stdlib'
+source       'https://github.com/camptocamp/puppet-networkmanager'
+author       'Camptocamp'
+summary      'Puppet NetworkManager module'
+project_page 'https://github.com/camptocamp/puppet-networkmanager'
