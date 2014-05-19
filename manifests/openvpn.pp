@@ -24,10 +24,13 @@ define networkmanager::openvpn (
     'package', 'network-manager-openvpn', { ensure => present, }
   )
 
-  if $::networkmanager::gui {
-    ensure_resource(
-      'package', 'network-manager-openvpn-gnome', { ensure => present, }
-    )
+  case $::networkmanager::gui {
+    'gnome': {
+      ensure_resource(
+        'package', 'network-manager-openvpn-gnome', { ensure => present, }
+      )
+    }
+    default: {}
   }
 
   file { "/etc/NetworkManager/system-connections/${name}":
