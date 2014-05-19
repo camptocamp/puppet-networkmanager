@@ -75,6 +75,9 @@ Should the service be started by Puppet. Defaults to `true`.
 ####`version`
 The package version to install. Defaults to `present`.
 
+####`gui`
+Wether to install the packages for the gnome GUI. Defaults to `false`.
+
 ###resource: networkmanager::openconnect
 
 ####`authtype`

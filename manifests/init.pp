@@ -2,6 +2,7 @@ class networkmanager(
   $version = present,
   $enable  = true,
   $start   = true,
+  $gui     = false,
 
   $openconnect_connections = {},
   $openvpn_connections     = {},
