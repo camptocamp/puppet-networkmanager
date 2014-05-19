@@ -20,6 +20,15 @@ define networkmanager::openconnect (
     'package', 'network-manager-openconnect', { ensure => present, }
   )
 
+  case $::networkmanager::gui {
+    'gnome': {
+      ensure_resource(
+        'package', 'network-manager-openconnect-gnome', { ensure => present, }
+      )
+    }
+    default: {}
+  }
+
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure  => $ensure,
     owner   => 'root',
