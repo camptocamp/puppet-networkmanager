@@ -17,6 +17,8 @@ ca=<%= @ca %>
 ta=<%= @ta %>
 
 [ipv4]
+<% if @routes -%>
 routes1=<%= @routes %>
+<% end -%>
 method=<%= @ipv4_method %>
 never-default=<%= @never_default %>
