@@ -16,6 +16,7 @@ define networkmanager::openvpn (
   $ipv4_method   = 'auto',
   $never_default = true,
   $routes        = '',
+  $dns = undef,
 ) {
 
   Class['networkmanager::install'] -> Networkmanager::Openvpn[$title]
