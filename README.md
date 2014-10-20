@@ -1,6 +1,7 @@
 NetworkManager
 ==============
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/networkmanager.svg)](https://forge.puppetlabs.com/camptocamp/networkmanager)
 [![Build Status](https://travis-ci.org/camptocamp/puppet-networkmanager.png?branch=master)](https://travis-ci.org/camptocamp/puppet-networkmanager)
 
 Overview
