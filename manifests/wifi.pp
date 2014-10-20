@@ -22,10 +22,10 @@ define networkmanager::wifi (
   Class['networkmanager::install'] -> Networkmanager::Wifi[$title]
 
   file { "/etc/NetworkManager/system-connections/${name}":
-    ensure    => $ensure,
-    owner     => 'root',
-    group     => 'root',
-    mode      => '0600',
+    ensure => $ensure,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0600',
   }
 
   if $ensure == 'present' {
