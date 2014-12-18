@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-networkmanager",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "author": "Camptocamp",
   "summary": "Puppet NetworkManager module",
   "license": "Apache 2.0",
@@ -8,7 +8,11 @@
   "project_page": "https://github.com/camptocamp/puppet-networkmanager",
   "issues_url": "https://github.com/camptocamp/puppet-networkmanager/issues",
   "dependencies": [
-    {"name":"puppetlabs/stdlib"},
-    {"name":"puppetlabs/inifile"}
+    {
+      "name": "puppetlabs/stdlib"
+    },
+    {
+      "name": "puppetlabs/inifile"
+    }
   ]
 }
