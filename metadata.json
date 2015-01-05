@@ -3,7 +3,7 @@
   "version": "0.3.4",
   "author": "Camptocamp",
   "summary": "Puppet NetworkManager module",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/camptocamp/puppet-networkmanager",
   "project_page": "https://github.com/camptocamp/puppet-networkmanager",
   "issues_url": "https://github.com/camptocamp/puppet-networkmanager/issues",
