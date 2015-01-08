@@ -9,7 +9,7 @@ define networkmanager::wifi (
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure             = present,
   $mode               = 'infrastructure',
-  $mac_address        = '',
+  $mac_address        = undef,
   $autoconnect        = true,
   $ipv4_method        = 'auto',
   $ipv6_method        = 'auto',

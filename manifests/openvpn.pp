@@ -15,7 +15,7 @@ define networkmanager::openvpn (
   $autoconnect   = false,
   $ipv4_method   = 'auto',
   $never_default = true,
-  $routes        = '',
+  $routes        = undef,
   $dns = undef,
 ) {
 
