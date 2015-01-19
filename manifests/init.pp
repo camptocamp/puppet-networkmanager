@@ -13,10 +13,10 @@ class networkmanager(
     validate_re($gui, ['^gnome', '^kde'])
   }
 
-  class { 'networkmanager::install': } ->
-  class { 'networkmanager::service': } ->
+  class { '::networkmanager::install': } ->
+  class { '::networkmanager::service': } ->
   Class['networkmanager']
 
-  class { 'networkmanager::config': } ->
+  class { '::networkmanager::config': } ->
   Class['networkmanager']
 }
