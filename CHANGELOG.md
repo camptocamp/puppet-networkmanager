@@ -1,3 +1,7 @@
+## 2015-03-24 - Release 0.3.7
+
+- Various spec improvements
+
 ## 2015-02-19 - Release 0.3.6
 
 - Various spec improvements
