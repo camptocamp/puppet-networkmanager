@@ -1,8 +1,11 @@
 NetworkManager
 ==============
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/networkmanager.svg)](https://forge.puppetlabs.com/camptocamp/networkmanager)
-[![Build Status](https://travis-ci.org/camptocamp/puppet-networkmanager.png?branch=master)](https://travis-ci.org/camptocamp/puppet-networkmanager)
+[![Puppet Forge Version](http://img.shields.io/puppetforge/v/camptocamp/networkmanager.svg)](https://forge.puppetlabs.com/camptocamp/networkmanager)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/camptocamp/networkmanager.svg)](https://forge.puppetlabs.com/camptocamp/networkmanager)
+[![Build Status](https://img.shields.io/travis/camptocamp/puppet-networkmanager/master.svg)](https://travis-ci.org/camptocamp/puppet-networkmanager)
+[![Gemnasium](https://img.shields.io/gemnasium/camptocamp/puppet-networkmanager.svg)](https://gemnasium.com/camptocamp/puppet-networkmanager)
+[![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
 
 Overview
 --------
