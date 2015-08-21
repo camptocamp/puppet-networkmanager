@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-networkmanager",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "author": "Camptocamp",
   "summary": "Puppet NetworkManager module",
   "license": "Apache-2.0",
