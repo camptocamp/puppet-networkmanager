@@ -1,6 +1,6 @@
 # Class networkmanager::params
 class networkmanager::params {
-  $ensure = 'present'
+  $package_ensure = 'present'
   $manage_packages = true
   $manage_service = true
   $service_enable = true
@@ -18,6 +18,7 @@ class networkmanager::params {
       $package_openvpn_kde = undef
       $package_openconnect_gnome = 'network-manager-openconnect-gnome'
       $package_openconnect_kde = undef
+      $service = 'network-manager'
     }
     'RedHat': {
       $package = 'NetworkManager'
@@ -30,6 +31,7 @@ class networkmanager::params {
       $package_openvpn_kde = 'kde-plasma-networkmanagement-openvpn'
       $package_openconnect_gnome = undef
       $package_openconnect_kde = 'kde-plasma-networkmanagement-openconnect'
+      $service = 'NetworkManager'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
