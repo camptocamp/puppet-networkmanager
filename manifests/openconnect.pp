@@ -1,11 +1,10 @@
-# See README.md for details.
+#Define networkmanager::openconnect
 define networkmanager::openconnect (
   $user,
   $gateway,
   $authtype,
   $xmlconfig,
-  $uuid          = regsubst(
-    md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
+  $uuid          = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure        = 'present',
   $id            = $name,
   $autoconnect   = false,
@@ -14,20 +13,12 @@ define networkmanager::openconnect (
   $never_default = true,
 ) {
 
-  Class['networkmanager::install'] -> Networkmanager::Openconnect[$title]
+  include ::networkmanager::install::openconnect
 
-  ensure_resource(
-    'package', 'network-manager-openconnect', { ensure => present, }
-  )
+  Class['networkmanager::install::openconnect'] ->
+  Networkmanager::Openconnect[$title] ~>
+  Class['networkmanager::service']
 
-  case $::networkmanager::gui {
-    'gnome': {
-      ensure_resource(
-        'package', 'network-manager-openconnect-gnome', { ensure => present, }
-      )
-    }
-    default: {}
-  }
 
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure  => $ensure,

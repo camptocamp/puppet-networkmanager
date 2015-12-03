@@ -2,26 +2,87 @@
 id=<%= @id %>
 uuid=<%= @uuid %>
 type=vpn
-permissions=user:<%= @user %>:;
-autoconnect=<%= @autoconnect %>
+<% if @systemloginuser != :undef -%>
+permissions=user:<%= @systemloginuser %>:;
+<% else -%>
+permissions=
+<% end -%>
+<% if @autoconnect -%>
+autoconnect=true
+<% elsif @autoconnect != :undef -%>
+autoconnect=false
+<% end -%>
 
 [vpn]
 service-type=org.freedesktop.NetworkManager.openvpn
-ta-dir=<%= @ta_dir %>
-connection-type=<%= @connection_type %>
-password-flags=<%= @password_flags %>
 remote=<%= @remote %>
-comp-lzo=<%= @comp_lzo %>
-username=<%= @user %>
+connection-type=<%= @connection_type %>
+<% if @remote_random -%>
+remote-random=yes
+<% elsif @remote_random != :undef -%>
+remote-random=no
+<% end -%>
+<% if @connection_type.include? "tls" -%>
+<%   if @cert != :undef -%>
+cert=<%= @cert %>
+<%   end -%>
+<%   if @key != :undef -%>
+key=<%= @key %>
+<%   end -%>
+<%   if @cert_pass_flags != :undef -%>
+cert-pass-flags=<%= @cert_pass_flags %>
+<%   else -%>
+cert-pass-flags=0
+<%   end %>
+<% end -%>
+<% if @connection_type.include? "password" -%>
+<%   if @vpnloginuser != :undef -%>
+username=<%= @vpnloginuser %>
+<%   end -%>
+<%   if @password_flags != :undef -%>
+password-flags=<%= @password_flags %>
+<%   else -%>
+password-flags=2
+<%   end -%>
+<% end -%>
+<% if @hmac != :undef -%>
+auth=<%= @hmac %>
+<% end -%>
+<% if @cipher != :undef -%>
+cipher=<%= @cipher %>
+<% end -%>
+<% if @comp_lzo -%>
+comp-lzo=yes
+<% elsif @comp_lzo != :undef -%>
+comp-lzo=no
+<% end -%>
+<% if @ca != :undef -%>
 ca=<%= @ca %>
+<% end -%>
+<% if @ta != :undef -%>
 ta=<%= @ta %>
+<% end -%>
+<% if @ta_dir != :undef -%>
+ta-dir=<%= @ta_dir %>
+<% end -%>
+<% if @dev_type != :undef -%>
+dev-type=<%= @dev_type %>
+<% end -%>
 
 [ipv4]
-<% if @routes -%>
+method=<%= @ipv4_method %>
+<% if @routes != :undef -%>
 routes1=<%= @routes %>
 <% end -%>
-<% if @dns -%>
+<% if @dns != :undef -%>
 dns=<%= @dns %>
 <% end -%>
-method=<%= @ipv4_method %>
+<% if @dns_search != :undef -%>
+dns-search=<%= @dns_search %>
+<% end -%>
+<% if @never_default != :undef -%>
 never-default=<%= @never_default %>
+<% end -%>
+
+[ipv6]
+method=ignore

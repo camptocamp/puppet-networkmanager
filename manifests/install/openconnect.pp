@@ -1,19 +1,19 @@
-# Class networkmanager::install
-class networkmanager::install {
+# Class networkmanager::install::openconnect
+class networkmanager::install::openconnect {
   include ::networkmanager
 
   if $::networkmanager::manage_packages {
-    package { $::networkmanager::package:
+    package { $::networkmanager::params::package_openconnect:
       ensure => $::networkmanager::package_ensure,
     }
     case $::networkmanager::gui {
       'gnome': {
-        package { $::networkmanager::package_gnome:
+        package { $::networkmanager::params::package_openconnect_gnome:
           ensure => $::networkmanager::package_ensure,
         }
       }
       'kde': {
-        package { $::networkmanager::package_kde:
+        package { $::networkmanager::params::package_openconnect_kde:
           ensure => $::networkmanager::package_ensure,
         }
       }
