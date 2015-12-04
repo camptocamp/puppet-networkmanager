@@ -2,14 +2,14 @@
 id=<%= @id %>
 uuid=<%= @uuid %>
 type=vpn
-<% if @systemloginuser != :undef -%>
-permissions=user:<%= @systemloginuser %>:;
-<% else -%>
+<% if @systemloginuser.empty? -%>
 permissions=
+<% else -%>
+permissions=user:<%= @systemloginuser %>:;
 <% end -%>
 <% if @autoconnect -%>
 autoconnect=true
-<% elsif @autoconnect != :undef -%>
+<% elsif !@autoconnect.empty? -%>
 autoconnect=false
 <% end -%>
 
@@ -19,68 +19,68 @@ remote=<%= @remote %>
 connection-type=<%= @connection_type %>
 <% if @remote_random -%>
 remote-random=yes
-<% elsif @remote_random != :undef -%>
+<% elsif !@remote_random.empty? -%>
 remote-random=no
 <% end -%>
 <% if @connection_type.include? "tls" -%>
-<%   if @cert != :undef -%>
+<%   if !@cert.empty? -%>
 cert=<%= @cert %>
 <%   end -%>
-<%   if @key != :undef -%>
+<%   if !@key.empty? -%>
 key=<%= @key %>
 <%   end -%>
-<%   if @cert_pass_flags != :undef -%>
+<%   if !@cert_pass_flags.empty? -%>
 cert-pass-flags=<%= @cert_pass_flags %>
 <%   else -%>
 cert-pass-flags=0
 <%   end %>
 <% end -%>
 <% if @connection_type.include? "password" -%>
-<%   if @vpnloginuser != :undef -%>
+<%   if !@vpnloginuser.empty? -%>
 username=<%= @vpnloginuser %>
 <%   end -%>
-<%   if @password_flags != :undef -%>
+<%   if !@password_flags.empty? -%>
 password-flags=<%= @password_flags %>
 <%   else -%>
 password-flags=2
 <%   end -%>
 <% end -%>
-<% if @hmac != :undef -%>
+<% if !@hmac.empty? -%>
 auth=<%= @hmac %>
 <% end -%>
-<% if @cipher != :undef -%>
+<% if !@cipher.empty? -%>
 cipher=<%= @cipher %>
 <% end -%>
 <% if @comp_lzo -%>
 comp-lzo=yes
-<% elsif @comp_lzo != :undef -%>
+<% elsif !@comp_lzo.empty? -%>
 comp-lzo=no
 <% end -%>
-<% if @ca != :undef -%>
+<% if !@ca.empty? -%>
 ca=<%= @ca %>
 <% end -%>
-<% if @ta != :undef -%>
+<% if !@ta.empty? -%>
 ta=<%= @ta %>
 <% end -%>
-<% if @ta_dir != :undef -%>
+<% if !@ta_dir.empty? -%>
 ta-dir=<%= @ta_dir %>
 <% end -%>
-<% if @dev_type != :undef -%>
+<% if !@dev_type.empty? -%>
 dev-type=<%= @dev_type %>
 <% end -%>
 
 [ipv4]
 method=<%= @ipv4_method %>
-<% if @routes != :undef -%>
+<% if !@routes.empty? -%>
 routes1=<%= @routes %>
 <% end -%>
-<% if @dns != :undef -%>
+<% if !@dns.empty? -%>
 dns=<%= @dns %>
 <% end -%>
-<% if @dns_search != :undef -%>
+<% if !@dns_search.empty? -%>
 dns-search=<%= @dns_search %>
 <% end -%>
-<% if @never_default != :undef -%>
+<% if !@never_default.empty? -%>
 never-default=<%= @never_default %>
 <% end -%>
 
