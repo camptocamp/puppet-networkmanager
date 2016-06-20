@@ -35,5 +35,6 @@ define networkmanager::openconnect (
     group   => 'root',
     mode    => '0600',
     content => template('networkmanager/openconnect.erb'),
+    notify  => Exec['reload nm configuration'],
   }
 }
