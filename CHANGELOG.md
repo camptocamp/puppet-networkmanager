@@ -1,3 +1,7 @@
+## 2016-06-30 - Release 0.4.0
+
+Reload all connection files (fix #14)
+
 ## 2015-08-21 - Release 0.3.17
 
 Use docker for acceptance tests
