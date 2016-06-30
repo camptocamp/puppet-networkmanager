@@ -1,3 +1,4 @@
+# Class networkmanager::config
 class networkmanager::config {
   validate_hash($::networkmanager::openconnect_connections)
   validate_hash($::networkmanager::openvpn_connections)

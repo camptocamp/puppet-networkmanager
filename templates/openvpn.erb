@@ -2,26 +2,89 @@
 id=<%= @id %>
 uuid=<%= @uuid %>
 type=vpn
-permissions=user:<%= @user %>:;
-autoconnect=<%= @autoconnect %>
+<% if @systemloginuser.nil? -%>
+permissions=
+<% else -%>
+permissions=user:<%= @systemloginuser %>:;
+<% end -%>
+<% if @autoconnect -%>
+autoconnect=true
+<% else -%>
+autoconnect=false
+<% end -%>
 
 [vpn]
 service-type=org.freedesktop.NetworkManager.openvpn
-ta-dir=<%= @ta_dir %>
-connection-type=<%= @connection_type %>
-password-flags=<%= @password_flags %>
 remote=<%= @remote %>
-comp-lzo=<%= @comp_lzo %>
-username=<%= @user %>
+connection-type=<%= @connection_type %>
+<% if @remote_random -%>
+remote-random=yes
+<% elsif !@remote_random.nil? -%>
+remote-random=no
+<% end -%>
+<% if @connection_type.include? "tls" -%>
+<%   if !@cert.nil? -%>
+cert=<%= @cert %>
+<%   end -%>
+<%   if !@key.nil? -%>
+key=<%= @key %>
+<%   end -%>
+<%   if !@cert_pass_flags.nil? -%>
+cert-pass-flags=<%= @cert_pass_flags %>
+<%   else -%>
+cert-pass-flags=0
+<%   end %>
+<% end -%>
+<% if @connection_type.include? "password" -%>
+<%   if !@vpnloginuser.nil? -%>
+username=<%= @vpnloginuser %>
+<%   end -%>
+<%   if !@password_flags.nil? -%>
+password-flags=<%= @password_flags %>
+<%   else -%>
+password-flags=2
+<%   end -%>
+<% end -%>
+<% if !@hmac.nil? -%>
+auth=<%= @hmac %>
+<% end -%>
+<% if !@cipher.nil? -%>
+cipher=<%= @cipher %>
+<% end -%>
+<% if @comp_lzo -%>
+comp-lzo=yes
+<% elsif !@comp_lzo.nil? -%>
+comp-lzo=no
+<% end -%>
+<% if !@ca.nil? -%>
 ca=<%= @ca %>
+<% end -%>
+<% if !@ta.nil? -%>
 ta=<%= @ta %>
+<% end -%>
+<% if !@ta_dir.nil? -%>
+ta-dir=<%= @ta_dir %>
+<% end -%>
+<% if !@dev_type.nil? -%>
+dev-type=<%= @dev_type %>
+<% end -%>
 
 [ipv4]
-<% if @routes -%>
+method=<%= @ipv4_method %>
+<% if !@routes.nil? -%>
 routes1=<%= @routes %>
 <% end -%>
-<% if @dns -%>
+<% if !@dns.nil? -%>
 dns=<%= @dns %>
 <% end -%>
-method=<%= @ipv4_method %>
+<% if !@dns_search.nil? -%>
+dns-search=<%= @dns_search %>
+<% else -%>
+dns-search=
+<% end -%>
+<% if !@never_default.nil? -%>
 never-default=<%= @never_default %>
+<% end -%>
+
+[ipv6]
+method=ignore

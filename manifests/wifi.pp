@@ -1,12 +1,11 @@
-# See README.md for details.
+# Define networkmanager::wifi
 define networkmanager::wifi (
   $user,
   $ssid,
   $eap,
   $phase2_auth,
   $password_raw_flags,
-  $uuid               = regsubst(
-    md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
+  $uuid               = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure             = present,
   $mode               = 'infrastructure',
   $mac_address        = undef,
@@ -19,7 +18,11 @@ define networkmanager::wifi (
   $auth_alg           = 'open',
 ) {
 
-  Class['networkmanager::install'] -> Networkmanager::Wifi[$title]
+  include ::networkmanager::install::wifi
+
+  Class['networkmanager::install::wifi'] ->
+  Networkmanager::Wifi[$title] ~>
+  Class['networkmanager::service']
 
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure => $ensure,

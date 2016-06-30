@@ -1,12 +1,12 @@
+# Class networkmanager::service
 class networkmanager::service {
-  $ensure = $::networkmanager::start ? {
-    true    => running,
-    default => stopped,
-  }
+  include ::networkmanager
 
-  service { 'network-manager':
-    ensure => $ensure,
-    enable => $::networkmanager::enable,
+  if $::networkmanager::manage_service {
+    service { $::networkmanager::params::service:
+      ensure => $::networkmanager::service_ensure,
+      enable => $::networkmanager::service_enable,
+    }
   }
 
   exec {'reload nm configuration':
