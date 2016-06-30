@@ -40,5 +40,6 @@ define networkmanager::openvpn (
     group   => 'root',
     mode    => '0600',
     content => template('networkmanager/openvpn.erb'),
+    notify  => Exec['reload nm configuration'],
   }
 }

@@ -32,6 +32,7 @@ define networkmanager::wifi (
     Ini_setting {
       ensure  => present,
       path    => "/etc/NetworkManager/system-connections/${name}",
+      notify  => Exec['reload nm configuration'],
     }
 
     # section: connection
