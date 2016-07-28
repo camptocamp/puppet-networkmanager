@@ -174,6 +174,12 @@ The UUID of the connection. Default to MD5 of `name`.
 ####`ensure`
 Should the connection be `present` or `absent`. Default to `present`.
 
+####`ignore_ca_cert`
+Ignore CA certificate. It will only work if value of eap is `ttls`, `tls` or `peap`. Allowed values: `true` or `false`. Default to `false`.
+
+####`ignore_phase2_ca_cert`
+Ignore phase 2 CA certificate. It will only work if value of eap is `ttls`, `tls` or `peap`. Allowed values: `true` or `false`. Default to `false`.
+
 ####`ipv4_method`
 IPv4 method. Default to `auto`.
 
