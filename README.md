@@ -62,7 +62,7 @@ Resources:
 ###Class: networkmanager
 
 ####`enable`
-Should the service be enabled during boot time ? Defaults to `true`.
+Should the service be enabled during boot time ? Default to `true`.
 
 ####`openconnect_connections`
 A hash of OpenConnect connections to declare.
@@ -74,13 +74,13 @@ A hash of OpenVPN connections to declare.
 A hash of Wifi connections to declare.
 
 ####`start`
-Should the service be started by Puppet. Defaults to `true`.
+Should the service be started by Puppet. Default to `true`.
 
 ####`version`
-The package version to install. Defaults to `present`.
+The package version to install. Default to `present`.
 
 ####`gui`
-The gui packages to install ('gnome', 'kde', or undef). Defaults to `undef`.
+The gui packages to install ('gnome', 'kde', or undef). Default to `undef`.
 
 ###resource: networkmanager::openconnect
 
@@ -91,22 +91,22 @@ Authentication type.
 Whether to autoconnect the VPN.
 
 ####`ensure`
-Should the connection be `present` or `absent`. Defaults to `present`.
+Should the connection be `present` or `absent`. Default to `present`.
 
 ####`gateway`
 The remote host.
 
 ####`id`
-The id of the VPN connection, defaults to `name`.
+The id of the VPN connection, default to `name`.
 
 ####`ipv4_method`
-IPv4 method. Defaults to `auto`.
+IPv4 method. Default to `auto`.
 
 ####`ipv6_method`
-IPv6 method. Defaults to `auto`.
+IPv6 method. Default to `auto`.
 
 ####`never_default`
-Do not use VPN connection as default route. Defaults to `true`.
+Do not use VPN connection as default route. Default to `true`.
 
 ####`user`
 The user who can use the connection.
@@ -132,16 +132,16 @@ Whether to use LZO compression.
 The connection type.
 
 ####`ensure`
-Should the connection be `present` or `absent`. Defaults to `present`.
+Should the connection be `present` or `absent`. Default to `present`.
 
 ####`id`
-The id of the VPN connection. Defaults to `name`.
+The id of the VPN connection. Default to `name`.
 
 ####`ipv4_method`
-IPv4 method. Defaults to `auto`.
+IPv4 method. Default to `auto`.
 
 ####`never_default`
-Do not use VPN connection as default route. Defaults to `true`.
+Do not use VPN connection as default route. Default to `true`.
 
 ####`password_flags`
 The password flags.
@@ -172,13 +172,13 @@ The UUID of the connection. Default to MD5 of `name`.
 ####`eap`
 
 ####`ensure`
-Should the connection be `present` or `absent`. Defaults to `present`.
+Should the connection be `present` or `absent`. Default to `present`.
 
 ####`ipv4_method`
-IPv4 method. Defaults to `auto`.
+IPv4 method. Default to `auto`.
 
 ####`ipv6_method`
-IPv6 method. Defaults to `auto`.
+IPv6 method. Default to `auto`.
 
 ####`key_mgmt`
 
