@@ -5,18 +5,22 @@ define networkmanager::wifi (
   $eap,
   $phase2_auth,
   $password_raw_flags,
-  $uuid               = regsubst(
+  $uuid                   = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
-  $ensure             = present,
-  $mode               = 'infrastructure',
-  $mac_address        = undef,
-  $autoconnect        = true,
-  $ipv4_method        = 'auto',
-  $ipv6_method        = 'auto',
-  $security           = 'none',
-  $nma_ca_cert_ignore = false,
-  $key_mgmt           = 'wpa-eap',
-  $auth_alg           = 'open',
+  $ensure                 = present,
+  $mode                   = 'infrastructure',
+  $mac_address            = undef,
+  $autoconnect            = true,
+  $ipv4_method            = 'auto',
+  $ipv6_method            = 'auto',
+  $security               = 'none',
+  $nma_ca_cert_ignore     = false,
+  $key_mgmt               = 'wpa-eap',
+  $auth_alg               = 'open',
+  $ignore_ca_cert         = false,
+  $ignore_phase2_ca_cert  = false,
+  $gsettings_path         = "/org/gnome/nm-applet/eap/${uuid}/",
+  $gsettings_schema       = "org.gnome.nm-applet.eap",
 ) {
 
   Class['networkmanager::install'] -> Networkmanager::Wifi[$title]
@@ -139,4 +143,17 @@ define networkmanager::wifi (
 
   }
 
+  if ( $eap =~ /^tls|^ttls|^peap/ ) {
+    exec {"set ignore-ca-cert on user ${user} to \"${ignore_ca_cert}\"":
+      command     => "sudo -u ${user} DISPLAY=:0 gsettings set ${gsettings_schema}:${gsettings_path} ignore-ca-cert ${ignore_ca_cert}",
+      unless      => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get ${gsettings_schema}:${gsettings_path} ignore-ca-cert) = ${ignore_ca_cert} ]",
+      path        => '/usr/bin/',
+    }
+
+    exec {"set ignore-phase2-ca-cert on user ${user} to \"${ignore_phase2_ca_cert}\"":
+      command     => "sudo -u ${user} DISPLAY=:0 gsettings set ${gsettings_schema}:${gsettings_path} ignore-phase2-ca-cert ${ignore_phase2_ca_cert}",
+      unless      => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get ${gsettings_schema}:${gsettings_path} ignore-phase2-ca-cert) = ${ignore_phase2_ca_cert} ]",
+      path        => '/usr/bin/',
+    }
+  }
 }
