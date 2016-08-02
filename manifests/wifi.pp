@@ -143,31 +143,24 @@ define networkmanager::wifi (
 
   }
 
-  augeas { 'Update gsettings schema':
-    incl    => $gsettings_path,
-    lens    => 'Xml.lns',
-    context => "/files${gsettings_path}/schemalist/schema[2]/#attribute/",
-    changes => [
-      "set id org.gnome.nm-applet.eap.${uuid}",
-      "set path /org/gnome/nm-applet/eap/${uuid}/",
-    ],
-  } ~>
-  exec { 'Compile modifications':
-    command     => "/usr/bin/glib-compile-schemas ${directory}",
-    refreshonly => true,
-  }
+  if ( $eap =~ /^tls|^ttls|^peap/ ) {
+    file { "${directory}/org.gnome.nm-applet.eap.gschema.xml":
+      ensure  => file,
+      content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
+    } ~>
+    exec { 'Compile modifications':
+      command     => "/usr/bin/glib-compile-schemas ${directory}",
+      refreshonly => true,
+    }
 
-  gnome::gsettings { 'Update ignore-ca-cert':
-    schema  => "org.gnome.nm-applet.eap.${uuid}",
-    key     => 'ignore-ca-cert',
-    value   => $ignore_ca_cert,
-    require => Augeas['Update gsettings schema'],
-  }
+    exec {"sudo -u ${user} DISPLAY=:0 gsettings set org.gnome.nm-applet.eap.${uuid} ignore-ca-cert ${ignore_ca_cert}":
+      unless => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get org.gnome.nm-applet.eap.${uuid} ignore-ca-cert) = ${ignore_ca_cert} ]",
+      path   => '/usr/bin/',
+    }
 
-  gnome::gsettings { 'Update ignore-phase2-ca-cert':
-    schema  => "org.gnome.nm-applet.eap.${uuid}",
-    key     => 'ignore-phase2-ca-cert',
-    value   => $ignore_phase2_ca_cert,
-    require => Augeas['Update gsettings schema'],
+    exec {"sudo -u ${user} DISPLAY=:0 gsettings set org.gnome.nm-applet.eap.${uuid} ignore-phase2-ca-cert ${ignore_phase2_ca_cert}":
+      unless => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get org.gnome.nm-applet.eap.${uuid} ignore-phase2-ca-cert) = ${ignore_phase2_ca_cert} ]",
+      path   => '/usr/bin/',
+    }
   }
 }
