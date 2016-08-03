@@ -144,7 +144,7 @@ define networkmanager::wifi (
   }
 
   if ( $eap =~ /^tls|^ttls|^peap/ ) {
-    file { "${directory}/org.gnome.nm-applet.eap.gschema.xml":
+    file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
       ensure  => file,
       content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
     } ~>
