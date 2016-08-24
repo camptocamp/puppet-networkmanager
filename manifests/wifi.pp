@@ -5,18 +5,21 @@ define networkmanager::wifi (
   $eap,
   $phase2_auth,
   $password_raw_flags,
-  $uuid               = regsubst(
+  $uuid                   = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
-  $ensure             = present,
-  $mode               = 'infrastructure',
-  $mac_address        = undef,
-  $autoconnect        = true,
-  $ipv4_method        = 'auto',
-  $ipv6_method        = 'auto',
-  $security           = 'none',
-  $nma_ca_cert_ignore = false,
-  $key_mgmt           = 'wpa-eap',
-  $auth_alg           = 'open',
+  $ensure                 = present,
+  $mode                   = 'infrastructure',
+  $mac_address            = undef,
+  $autoconnect            = true,
+  $ipv4_method            = 'auto',
+  $ipv6_method            = 'auto',
+  $security               = 'none',
+  $nma_ca_cert_ignore     = false,
+  $key_mgmt               = 'wpa-eap',
+  $auth_alg               = 'open',
+  $directory              = '/usr/share/glib-2.0/schemas',
+  $ignore_ca_cert         = false,
+  $ignore_phase2_ca_cert  = false,
 ) {
 
   Class['networkmanager::install'] -> Networkmanager::Wifi[$title]
@@ -139,4 +142,26 @@ define networkmanager::wifi (
 
   }
 
+  if ( $eap =~ /^tls|^ttls|^peap/ ) {
+    file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
+      ensure  => file,
+      content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
+    } ~>
+    exec { "Compile modifications for ${uuid}":
+      command     => "/usr/bin/glib-compile-schemas ${directory}",
+      refreshonly => true,
+    }
+
+    exec {"sudo -u ${user} DISPLAY=:0 gsettings set org.gnome.nm-applet.eap.${uuid} ignore-ca-cert ${ignore_ca_cert}":
+      unless  => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get org.gnome.nm-applet.eap.${uuid} ignore-ca-cert) = ${ignore_ca_cert} ]",
+      path    => '/usr/bin/',
+      require => File["${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml"],
+    }
+
+    exec {"sudo -u ${user} DISPLAY=:0 gsettings set org.gnome.nm-applet.eap.${uuid} ignore-phase2-ca-cert ${ignore_phase2_ca_cert}":
+      unless  => "[ $(sudo -u ${user} DISPLAY=:0 gsettings get org.gnome.nm-applet.eap.${uuid} ignore-phase2-ca-cert) = ${ignore_phase2_ca_cert} ]",
+      path    => '/usr/bin/',
+      require => File["${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml"],
+    }
+  }
 }
