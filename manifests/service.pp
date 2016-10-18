@@ -8,4 +8,9 @@ class networkmanager::service {
       enable => $::networkmanager::service_enable,
     }
   }
+
+  exec {'reload nm configuration':
+    name        => '/usr/bin/nmcli connection reload',
+    refreshonly => true,
+  }
 }
