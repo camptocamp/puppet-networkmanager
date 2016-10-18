@@ -1,23 +1,14 @@
 # Class networkmanager::install::openvpn
 class networkmanager::install::openvpn {
-  include ::networkmanager
-
   if $::networkmanager::manage_packages {
-    package { $::networkmanager::params::package_openvpn:
-      ensure => $::networkmanager::package_ensure,
+    $package_ensure = pick($::networkmanager::version, $::networkmanager::package_ensure)
+    $package = $::networkmanager::gui ? {
+      'gnome' => $::networkmanager::params::package_openvpn_gnome,
+      'kde'   => $::networkmanager::params::package_openvpn_kde,
+      default => $::networkmanager::package_gui_openvpn,
     }
-    case $::networkmanager::gui {
-      'gnome': {
-        package { $::networkmanager::params::package_openvpn_gnome:
-          ensure => $::networkmanager::package_ensure,
-        }
-      }
-      'kde': {
-        package { $::networkmanager::params::package_openvpn_kde:
-          ensure => $::networkmanager::package_ensure,
-        }
-      }
-      default: {}
+    package { $package:
+      ensure => $package_ensure,
     }
   }
 }

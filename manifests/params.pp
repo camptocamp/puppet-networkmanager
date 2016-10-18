@@ -1,11 +1,17 @@
 # Class networkmanager::params
 class networkmanager::params {
+  $version = undef
+  $enable = undef
+  $start = undef
+  $gui = undef
   $package_ensure = 'present'
   $manage_packages = true
+  $package_gui = undef
+  $package_gui_openvpn = undef
+  $package_gui_openconnect = undef
   $manage_service = true
   $service_enable = true
   $service_ensure = 'running'
-  $gui = undef
   case $::osfamily {
     'Debian': {
       $package = 'network-manager'

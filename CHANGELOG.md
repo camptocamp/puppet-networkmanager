@@ -1,3 +1,9 @@
+## 2016-XX-XX - Release 0.X.X
+
+- Support for RH-based systems
+- Support for almost all openvpn parameters
+- Deprecated $version, $start and $enable
+
 ## 2016-08-18 - Release 0.4.0
 
 Reload all connection files (fix #14)

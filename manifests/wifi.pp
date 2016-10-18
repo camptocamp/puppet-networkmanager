@@ -7,7 +7,7 @@ define networkmanager::wifi (
   $password_raw_flags,
   $uuid                   = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
-  $ensure                 = present,
+  $ensure                 = 'present',
   $mode                   = 'infrastructure',
   $mac_address            = undef,
   $autoconnect            = true,
@@ -37,7 +37,7 @@ define networkmanager::wifi (
 
   if $ensure == 'present' {
     Ini_setting {
-      ensure  => present,
+      ensure  => 'present',
       path    => "/etc/NetworkManager/system-connections/${name}",
       notify  => Exec['reload nm configuration'],
     }
@@ -148,7 +148,7 @@ define networkmanager::wifi (
 
   if ( $eap =~ /^tls|^ttls|^peap/ ) {
     file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
-      ensure  => file,
+      ensure  => 'file',
       content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
     } ~>
     exec { "Compile modifications for ${uuid}":

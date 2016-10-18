@@ -61,8 +61,44 @@ Resources:
 
 ###Class: networkmanager
 
-####`enable`
-Should the service be enabled during boot time ? Defaults to `true`.
+####`gui`
+The gui packages to install ('gnome', 'kde', or undef). Defaults to `undef`.
+
+####`manage_packages`
+Should packages be installed by puppet? Defaults to `true`.
+
+####`package`
+Package name for NetworkManager. See params.pp for default.
+
+####`package_gui`
+Package name for NetworkManager graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_gui_openvpn`
+Package name for NetworkManager OpenVPN graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_gui_openconnect`
+Package name for NetworkManager OpenConnect graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_ensure`
+The package version to install. Defaults to `present`.
+NOTE: Setting is ignored if `version` is set.
+
+####`manage_service`
+Should puppet manage the NetworkManager service? Defaults to `true`.
+
+####`service`
+Service name for NetworkManager. See params.pp for default.
+
+####`service_enable`
+Should the service be enabled at boot? Defaults to `true`.
+NOTE: Setting is ignored if `enable` is set.
+
+####`service_ensure`
+Should the service be started by puppet? Defaults to `true`.
+NOTE: Setting is ignored if `start` is set.
 
 ####`openconnect_connections`
 A hash of OpenConnect connections to declare.
@@ -73,14 +109,17 @@ A hash of OpenVPN connections to declare.
 ####`wifi_connections`
 A hash of Wifi connections to declare.
 
-####`start`
-Should the service be started by Puppet. Defaults to `true`.
+####`enable` (DEPRECATED)
+Should the service be enabled during boot time ? Defaults to `undef`.
+Use `service_enable` instead. If `enable` is set, `service_enable` is ignored.
 
-####`version`
-The package version to install. Defaults to `present`.
+####`start` (DEPRECATED)
+Should the service be started by Puppet. Defaults to `undef`.
+Use `service_ensure` instead. If `start` is set, `service_ensure` is ignored.
 
-####`gui`
-The gui packages to install ('gnome', 'kde', or undef). Defaults to `undef`.
+####`version` (DEPRECATED)
+The package version to install. Defaults to `undef`.
+Use `package_ensure` instead. If `version` is set, `package_ensure` is ignored.
 
 ###resource: networkmanager::openconnect
 
