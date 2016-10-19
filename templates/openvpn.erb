@@ -2,7 +2,7 @@
 id=<%= @id %>
 uuid=<%= @uuid %>
 type=vpn
-<% if @_permitted_user.nil? -%>
+<% if @_permitted_user.nil? or @_permitted_user.eql? "" -%>
 permissions=
 <% else -%>
 permissions=user:<%= @_permitted_user %>:;

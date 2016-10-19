@@ -13,6 +13,7 @@ define networkmanager::openconnect (
   $never_default = true,
 ) {
 
+  include ::networkmanager
   include ::networkmanager::install::openconnect
 
   Class['networkmanager::install::openconnect'] ->

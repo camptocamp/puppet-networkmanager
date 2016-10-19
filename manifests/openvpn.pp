@@ -28,6 +28,7 @@ define networkmanager::openvpn (
   $dns_search      = undef,
 ) {
 
+  include ::networkmanager
   include ::networkmanager::install::openvpn
 
   Class['networkmanager::install::openvpn'] ->
@@ -37,8 +38,8 @@ define networkmanager::openvpn (
   if $user {
     warning('Define ::networkmanager: parameter $user has been deprecated and replaced with $username and $permitted_user.')
   }
-  $_permitted_user = pick($user, $permitted_user)
-  $_username = pick($user, $_username)
+  $_permitted_user = pick_default($user, $permitted_user)
+  $_username = pick_default($user, $_username)
 
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure  => $ensure,

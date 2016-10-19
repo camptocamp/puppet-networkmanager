@@ -22,6 +22,7 @@ define networkmanager::wifi (
   $ignore_phase2_ca_cert  = false,
 ) {
 
+  include ::networkmanager
   include ::networkmanager::install::wifi
 
   Class['networkmanager::install::wifi'] ->

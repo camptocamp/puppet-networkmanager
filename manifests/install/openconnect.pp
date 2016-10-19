@@ -7,8 +7,10 @@ class networkmanager::install::openconnect {
       'kde'   => $::networkmanager::params::package_openconnect_kde,
       default => $::networkmanager::package_gui_openconnect,
     }
-    package { $package:
-      ensure => $package_ensure,
+    if $package {
+      package { $package:
+        ensure => $package_ensure,
+      }
     }
   }
 }

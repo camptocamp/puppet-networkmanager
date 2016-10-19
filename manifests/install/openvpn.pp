@@ -7,8 +7,10 @@ class networkmanager::install::openvpn {
       'kde'   => $::networkmanager::params::package_openvpn_kde,
       default => $::networkmanager::package_gui_openvpn,
     }
-    package { $package:
-      ensure => $package_ensure,
+    if $package {
+      package { $package:
+        ensure => $package_ensure,
+      }
     }
   }
 }
