@@ -2,10 +2,10 @@
 id=<%= @id %>
 uuid=<%= @uuid %>
 type=vpn
-<% if @systemloginuser.nil? -%>
+<% if @_permitted_user.nil? -%>
 permissions=
 <% else -%>
-permissions=user:<%= @systemloginuser %>:;
+permissions=user:<%= @_permitted_user %>:;
 <% end -%>
 <% if @autoconnect -%>
 autoconnect=true
@@ -36,8 +36,8 @@ cert-pass-flags=0
 <%   end %>
 <% end -%>
 <% if @connection_type.include? "password" -%>
-<%   if !@vpnloginuser.nil? -%>
-username=<%= @vpnloginuser %>
+<%   if !@_username.nil? -%>
+username=<%= @_username %>
 <%   end -%>
 <%   if !@password_flags.nil? -%>
 password-flags=<%= @password_flags %>

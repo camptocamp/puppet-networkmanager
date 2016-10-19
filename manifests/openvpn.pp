@@ -1,21 +1,22 @@
 # Define networkmanager::openvpn
 define networkmanager::openvpn (
-  $remote,                  # use "vpn1.example.com:port:proto, vpn2.example.com:port:proto" syntax
-  $ca,                      # /path/to/ca.crt
-  $systemloginuser = undef, # username that owns the vpn connection profile
-  $vpnloginuser    = undef, # login to the vpn with this username
+  $remote,
+  $ca,
+  $user            = undef,
+  $username        = undef,
+  $permitted_user  = undef,
   $remote_random   = false,
-  $connection_type = 'tls', # can be 'tls', 'password-tls' or 'password'
-  $hmac            = undef, # this is the openvpn auth parameter
+  $connection_type = 'tls',
+  $hmac            = undef,
   $cipher          = undef,
   $dev_type        = undef,
-  $cert            = undef, # /path/to/cert.crt
-  $key             = undef, # /path/to/cert.key
+  $cert            = undef,
+  $key             = undef,
   $cert_pass_flags = undef,
-  $password_flags  = undef, # 0 = saved, 2 = always-ask, 4 = not-required
+  $password_flags  = undef,
   $comp_lzo        = false,
-  $ta              = undef, # /path/to/tlsauth.key
-  $ta_dir          = undef, # tlsauth key direction - must be 0 or 1
+  $ta              = undef,
+  $ta_dir          = undef,
   $uuid            = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure          = 'present',
   $id              = $name,
@@ -32,6 +33,12 @@ define networkmanager::openvpn (
   Class['networkmanager::install::openvpn'] ->
   Networkmanager::Openvpn[$title] ~>
   Class['networkmanager::service']
+
+  if $user {
+    warning('Define ::networkmanager: parameter $user has been deprecated and replaced with $username and $permitted_user.')
+  }
+  $_permitted_user = pick($user, $permitted_user)
+  $_username = pick($user, $_username)
 
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure  => $ensure,
