@@ -1,14 +1,17 @@
+# Class networkmanager::service
 class networkmanager::service {
-  $ensure = $::networkmanager::start ? {
-    true    => running,
-    default => stopped,
+  if $::networkmanager::manage_service {
+    $service_enable = pick($::networkmanager::enable, $::networkmanager::service_enable)
+    $service_ensure = $::networkmanager::start ? {
+      true    => 'running',
+      false   => 'stopped',
+      default => $::networkmanager::service_ensure,
+    }
+    service { $::networkmanager::service:
+      ensure => $service_ensure,
+      enable => $service_enable,
+    }
   }
-
-  service { 'network-manager':
-    ensure => $ensure,
-    enable => $::networkmanager::enable,
-  }
-
   exec {'reload nm configuration':
     name        => '/usr/bin/nmcli connection reload',
     refreshonly => true,

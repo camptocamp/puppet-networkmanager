@@ -61,8 +61,44 @@ Resources:
 
 ###Class: networkmanager
 
-####`enable`
-Should the service be enabled during boot time ? Defaults to `true`.
+####`gui`
+The gui packages to install ('gnome', 'kde', or undef). Defaults to `undef`.
+
+####`manage_packages`
+Should packages be installed by puppet? Defaults to `true`.
+
+####`package`
+Package name for NetworkManager. See params.pp for default.
+
+####`package_gui`
+Package name for NetworkManager graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_gui_openvpn`
+Package name for NetworkManager OpenVPN graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_gui_openconnect`
+Package name for NetworkManager OpenConnect graphical desktop component. Defaults to `undef`.
+Set this if your `gui` is neither 'gnome' nor 'kde'.
+
+####`package_ensure`
+The package version to install. Defaults to `present`.
+NOTE: Setting is ignored if `version` is set.
+
+####`manage_service`
+Should puppet manage the NetworkManager service? Defaults to `true`.
+
+####`service`
+Service name for NetworkManager. See params.pp for default.
+
+####`service_enable`
+Should the service be enabled at boot? Defaults to `true`.
+NOTE: Setting is ignored if `enable` is set.
+
+####`service_ensure`
+Should the service be started by puppet? Defaults to `true`.
+NOTE: Setting is ignored if `start` is set.
 
 ####`openconnect_connections`
 A hash of OpenConnect connections to declare.
@@ -73,14 +109,17 @@ A hash of OpenVPN connections to declare.
 ####`wifi_connections`
 A hash of Wifi connections to declare.
 
-####`start`
-Should the service be started by Puppet. Defaults to `true`.
+####`enable` (DEPRECATED)
+Should the service be enabled during boot time ? Defaults to `undef`.
+Use `service_enable` instead. If `enable` is set, `service_enable` is ignored.
 
-####`version`
-The package version to install. Defaults to `present`.
+####`start` (DEPRECATED)
+Should the service be started by Puppet. Defaults to `undef`.
+Use `service_ensure` instead. If `start` is set, `service_ensure` is ignored.
 
-####`gui`
-The gui packages to install ('gnome', 'kde', or undef). Defaults to `undef`.
+####`version` (DEPRECATED)
+The package version to install. Defaults to `undef`.
+Use `package_ensure` instead. If `version` is set, `package_ensure` is ignored.
 
 ###resource: networkmanager::openconnect
 
@@ -119,17 +158,59 @@ The xmlconfig for the VPN.
 
 ###resource: networkmanager::openvpn
 
-####`autoconnect`
-Whether to autoconnect the VPN.
+####`remote` (REQUIRED)
+The remote host. Example: 'vpn1.example.com:1194:tcp, vpn2.example.com:1194:udp'
 
-####`ca`
+####`ca` (REQUIRED)
 Path to the CA certificate.
+
+####`user` (DEPRECATED)
+The user who can use the connection. Replaced with `username` and `permitted_user`. If `user` is set, `username` and `permitted_user` are ignored.
+
+####`username`
+The VPN connection login username. NOTE: If `user` is set, this setting is ignored.
+
+####`permitted_user`
+The local system user that is permitted to activate/deactivate/modify the VPN connection. Leave blank to allow access to all system users. NOTE: If `user` is set, this setting is ignored.
+
+####`remote_random`
+Whether to pick a random remote address from the `remote` list when connecting.
+
+####`connection_type`
+The connection type. Can be 'tls', 'password-tls' or 'password'.
+
+####`hmac`
+The OpenVPN 'auth' parameter. Example: 'SHA512'.
+
+####`cipher`
+The OpenVPN 'cipher' parameter. Example: 'AES-256-CBC'.
+
+####`dev_type`
+Device type for the VPN connection. Example: 'tun'.
+
+####`cert`
+Path to the client/host certificate. Required for TLS-based connections.
+
+####`key`
+Path to the client/host private key. Required for TLS-based connections.
+
+####`cert_pass_flags`
+How to obtain private key decryption passphrase? Can be '0' (saved), '1' (use-agent), '2' (never-saved/always-ask), '4' (not-required)
+
+####`password_flags`
+How to obtain password to login to VPN? Can be '0' (saved), '1' (use-agent), '2' (never-saved/always-ask), '4' (not-required)
 
 ####`comp_lzo`
 Whether to use LZO compression.
 
-####`connection_type`
-The connection type.
+####`ta`
+Path to the TLS-AUTH key.
+
+####`ta_dir`
+TLS-AUTH direction. Can be '0' or '1'.
+
+####`uuid`
+The UUID of the connection. Default to MD5 of `name`.
 
 ####`ensure`
 Should the connection be `present` or `absent`. Defaults to `present`.
@@ -137,31 +218,23 @@ Should the connection be `present` or `absent`. Defaults to `present`.
 ####`id`
 The id of the VPN connection. Defaults to `name`.
 
+####`autoconnect`
+Whether to autoconnect the VPN.
+
 ####`ipv4_method`
 IPv4 method. Defaults to `auto`.
 
 ####`never_default`
 Do not use VPN connection as default route. Defaults to `true`.
 
-####`password_flags`
-The password flags.
-
-####`remote`
-The remote host.
-
 ####`routes`
+Add these additional routes when connected.
 
-####`ta`
-Path to the TA key.
+####`dns`
+DNS servers to use when connected.
 
-####`ta_dir`
-Whether to use a ta directory.
-
-####`user`
-The user who can use the connection.
-
-####`uuid`
-The UUID of the connection. Default to MD5 of `name`.
+####`dns_search`
+Add this DNS search domain into local resolver when connected.
 
 ###resource: networkmanager::wifi
 

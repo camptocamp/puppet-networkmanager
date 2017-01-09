@@ -1,38 +1,45 @@
-# See README.md for details.
+# Define networkmanager::openvpn
 define networkmanager::openvpn (
-  $user,
-  $ta_dir,
-  $connection_type,
-  $password_flags,
   $remote,
-  $comp_lzo,
   $ca,
-  $ta,
-  $uuid          = regsubst(
-    md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
-  $ensure        = 'present',
-  $id            = $name,
-  $autoconnect   = false,
-  $ipv4_method   = 'auto',
-  $never_default = true,
-  $routes        = undef,
-  $dns = undef,
+  $user            = undef,
+  $username        = undef,
+  $permitted_user  = undef,
+  $remote_random   = false,
+  $connection_type = 'tls',
+  $hmac            = undef,
+  $cipher          = undef,
+  $dev_type        = undef,
+  $cert            = undef,
+  $key             = undef,
+  $cert_pass_flags = undef,
+  $password_flags  = undef,
+  $comp_lzo        = false,
+  $ta              = undef,
+  $ta_dir          = undef,
+  $uuid            = regsubst(md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
+  $ensure          = 'present',
+  $id              = $name,
+  $autoconnect     = false,
+  $ipv4_method     = 'auto',
+  $never_default   = undef,
+  $routes          = undef,
+  $dns             = undef,
+  $dns_search      = undef,
 ) {
 
-  Class['networkmanager::install'] -> Networkmanager::Openvpn[$title]
+  include ::networkmanager
+  include ::networkmanager::install::openvpn
 
-  ensure_resource(
-    'package', 'network-manager-openvpn', { ensure => present, }
-  )
+  Class['networkmanager::install::openvpn'] ->
+  Networkmanager::Openvpn[$title] ~>
+  Class['networkmanager::service']
 
-  case $::networkmanager::gui {
-    'gnome': {
-      ensure_resource(
-        'package', 'network-manager-openvpn-gnome', { ensure => present, }
-      )
-    }
-    default: {}
+  if $user {
+    warning('Define ::networkmanager: parameter $user has been deprecated and replaced with $username and $permitted_user.')
   }
+  $_permitted_user = pick_default($user, $permitted_user)
+  $_username = pick_default($user, $_username)
 
   file { "/etc/NetworkManager/system-connections/${name}":
     ensure  => $ensure,
