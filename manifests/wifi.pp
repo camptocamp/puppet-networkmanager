@@ -146,8 +146,8 @@ define networkmanager::wifi (
     file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
       ensure  => file,
       content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
-    } ~>
-    exec { "Compile modifications for ${uuid}":
+    }
+    ~> exec { "Compile modifications for ${uuid}":
       command     => "/usr/bin/glib-compile-schemas ${directory}",
       refreshonly => true,
     }
