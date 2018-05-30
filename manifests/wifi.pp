@@ -1,7 +1,7 @@
 # See README.md for details.
 define networkmanager::wifi (
-  $user = undef,
   $ssid,
+  $user = undef,
   $wpa_psk = undef,
   $eap = undef,
   $phase2_auth = undef,
@@ -34,11 +34,11 @@ define networkmanager::wifi (
   }
 
   if ($eap and $key_mgmt != 'wpa-eap') {
-    fail("NON-EAP Key management selected with EAP")
+    fail('NON-EAP Key management selected with EAP')
   }
 
   if ($wpa_psk and $key_mgmt != 'wpa-psk') {
-    fail("WPA-PSK Key provided without WPA-PSK Key Management")
+    fail('WPA-PSK Key provided without WPA-PSK Key Management')
   }
 
   if $ensure == 'present' {
