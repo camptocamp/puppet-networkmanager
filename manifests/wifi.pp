@@ -13,6 +13,7 @@ define networkmanager::wifi (
   $autoconnect            = true,
   $ipv4_method            = 'auto',
   $ipv6_method            = 'auto',
+  $ipv6_addr_gen_mode     = 'stable-privacy',
   $security               = 'none',
   $nma_ca_cert_ignore     = false,
   $key_mgmt               = 'wpa-eap',
@@ -107,6 +108,12 @@ define networkmanager::wifi (
       section => 'ipv6',
       setting => 'method',
       value   => $ipv6_method,
+    }
+
+    ini_setting { "${name}/ipv6/addr-gen-mode":
+      section => 'ipv6',
+      setting => 'addr-gen-mode',
+      value   => $ipv6_addr_gen_mode,
     }
 
     # section: 802-1x
