@@ -44,6 +44,12 @@ networkmanager::wifi { 'My Wifi Connection 0':
   phase2_auth        => 'mschapv2',
   password_raw_flags => 1,
 }
+
+networkmanager::wifi { 'My Wifi Connection 1':
+  ssid     => 'myGuestSSID',
+  psk      => 'SuperSecretPassword!',
+  key_mgmt => 'wpa-psk',
+}
 ```
 
 Reference
@@ -170,6 +176,7 @@ The UUID of the connection. Default to MD5 of `name`.
 ####`autoconnect`
 
 ####`eap`
+Mutually exclusive with `wpa-psk`
 
 ####`ensure`
 Should the connection be `present` or `absent`. Defaults to `present`.
@@ -187,6 +194,7 @@ IPv4 method. Defaults to `auto`.
 IPv6 method. Defaults to `auto`.
 
 ####`key_mgmt`
+`wpa-eap` or `wpa-psk`.  Defaults to `wpa-eap`
 
 ####`mac_address`
 
@@ -197,6 +205,9 @@ IPv6 method. Defaults to `auto`.
 ####`password_raw_flags`
 
 ####`phase2_auth`
+
+#### wpa_psk
+The WPA-PSK. Requires `wpa-psk` key management.
 
 ####`security`
 

@@ -1,10 +1,11 @@
 # See README.md for details.
 define networkmanager::wifi (
-  $user,
+  $user = undef,
   $ssid,
-  $eap,
-  $phase2_auth,
-  $password_raw_flags,
+  $wpa_psk = undef,
+  $eap = undef,
+  $phase2_auth = undef,
+  $password_raw_flags = undef,
   $uuid                   = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure                 = present,
@@ -30,6 +31,14 @@ define networkmanager::wifi (
     owner  => 'root',
     group  => 'root',
     mode   => '0600',
+  }
+
+  if ($eap and $key_mgmt != 'wpa-eap') {
+    fail("NON-EAP Key management selected with EAP")
+  }
+
+  if ($wpa_psk and $key_mgmt != 'wpa-psk') {
+    fail("WPA-PSK Key provided without WPA-PSK Key Management")
   }
 
   if $ensure == 'present' {
@@ -58,10 +67,12 @@ define networkmanager::wifi (
       value   => '802-11-wireless',
     }
 
-    ini_setting { "${name}/connection/permissions":
-      section => 'connection',
-      setting => 'permissions',
-      value   => "user:${user}:;",
+    if ($user) {
+      ini_setting { "${name}/connection/permissions":
+        section => 'connection',
+        setting => 'permissions',
+        value   => "user:${user}:;",
+      }
     }
 
     # section: 802-11-wireless
@@ -88,6 +99,14 @@ define networkmanager::wifi (
       section => '802-11-wireless-security',
       setting => 'key-mgmt',
       value   => $key_mgmt,
+    }
+
+    if ($wpa_psk) {
+      ini_setting { "${name}/802-11-wireless-security/psk":
+        section => '802-11-wireless-security',
+        setting => 'psk',
+        value   => $wpa_psk,
+      }
     }
 
     ini_setting { "${name}/802-11-wireless-security/auth-alg":
@@ -117,39 +136,41 @@ define networkmanager::wifi (
     }
 
     # section: 802-1x
-    ini_setting { "${name}/802-1x/eap":
-      section => '802-1x',
-      setting => 'eap',
-      value   => "${eap};",
-    }
+    if ($eap) {
+      ini_setting { "${name}/802-1x/eap":
+        section => '802-1x',
+        setting => 'eap',
+        value   => "${eap};",
+      }
 
-    ini_setting { "${name}/802-1x/identity":
-      section => '802-1x',
-      setting => 'identity',
-      value   => $user,
-    }
+      ini_setting { "${name}/802-1x/identity":
+        section => '802-1x',
+        setting => 'identity',
+        value   => $user,
+      }
 
-    ini_setting { "${name}/802-1x/phase2-auth":
-      section => '802-1x',
-      setting => 'phase2-auth',
-      value   => $phase2_auth,
-    }
+      ini_setting { "${name}/802-1x/phase2-auth":
+        section => '802-1x',
+        setting => 'phase2-auth',
+        value   => $phase2_auth,
+      }
 
-    ini_setting { "${name}/802-1x/password-raw-flags":
-      section => '802-1x',
-      setting => 'password-raw-flags',
-      value   => $password_raw_flags,
-    }
+      ini_setting { "${name}/802-1x/password-raw-flags":
+        section => '802-1x',
+        setting => 'password-raw-flags',
+        value   => $password_raw_flags,
+      }
 
-    ini_setting { "${name}/802-1x/nma-ca-cert-ignore":
-      section => '802-1x',
-      setting => 'nma-ca-cert-ignore',
-      value   => $nma_ca_cert_ignore,
+      ini_setting { "${name}/802-1x/nma-ca-cert-ignore":
+        section => '802-1x',
+        setting => 'nma-ca-cert-ignore',
+        value   => $nma_ca_cert_ignore,
+      }
     }
 
   }
 
-  if ( $eap =~ /^tls|^ttls|^peap/ ) {
+  if ( $eap and $eap =~ /^tls|^ttls|^peap/ ) {
     file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
       ensure  => file,
       content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
