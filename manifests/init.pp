@@ -3,6 +3,7 @@ class networkmanager(
   $enable  = true,
   $start   = true,
   $gui     = undef,
+  $dns     = undef,
 
   $openconnect_connections = {},
   $openvpn_connections     = {},
