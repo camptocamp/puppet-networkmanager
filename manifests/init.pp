@@ -1,18 +1,13 @@
 class networkmanager(
-  $version = present,
-  $enable  = true,
-  $start   = true,
-  $gui     = undef,
+  Enum['absent','present'] $version = present,
+  Boolean $enable = true,
+  Boolean $start = true,
+  Optional[Enum['^gnome', '^kde']] $gui = undef,
 
-  $openconnect_connections = {},
-  $openvpn_connections     = {},
-  $wifi_connections        = {},
+  Hash $openconnect_connections = {},
+  Hash $openvpn_connections     = {},
+  Hash $wifi_connections        = {},
 ) {
-
-  if $gui != undef {
-    validate_re($gui, ['^gnome', '^kde'])
-  }
-
   class { '::networkmanager::install': }
   -> class { '::networkmanager::service': }
   -> Class['networkmanager']
