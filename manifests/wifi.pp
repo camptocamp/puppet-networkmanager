@@ -1,10 +1,11 @@
 # See README.md for details.
 define networkmanager::wifi (
-  $user,
   $ssid,
-  $eap,
-  $phase2_auth,
-  $password_raw_flags,
+  $user = undef,
+  $wpa_psk = undef,
+  $eap = undef,
+  $phase2_auth = undef,
+  $password_raw_flags = undef,
   $uuid                   = regsubst(
     md5($name), '^(.{8})(.{4})(.{4})(.{4})(.{12})$', '\1-\2-\3-\4-\5'),
   $ensure                 = present,
@@ -13,6 +14,7 @@ define networkmanager::wifi (
   $autoconnect            = true,
   $ipv4_method            = 'auto',
   $ipv6_method            = 'auto',
+  $ipv6_addr_gen_mode     = 'stable-privacy',
   $security               = 'none',
   $nma_ca_cert_ignore     = false,
   $key_mgmt               = 'wpa-eap',
@@ -29,6 +31,14 @@ define networkmanager::wifi (
     owner  => 'root',
     group  => 'root',
     mode   => '0600',
+  }
+
+  if ($eap and $key_mgmt != 'wpa-eap') {
+    fail('NON-EAP Key management selected with EAP')
+  }
+
+  if ($wpa_psk and $key_mgmt != 'wpa-psk') {
+    fail('WPA-PSK Key provided without WPA-PSK Key Management')
   }
 
   if $ensure == 'present' {
@@ -57,10 +67,12 @@ define networkmanager::wifi (
       value   => '802-11-wireless',
     }
 
-    ini_setting { "${name}/connection/permissions":
-      section => 'connection',
-      setting => 'permissions',
-      value   => "user:${user}:;",
+    if ($user) {
+      ini_setting { "${name}/connection/permissions":
+        section => 'connection',
+        setting => 'permissions',
+        value   => "user:${user}:;",
+      }
     }
 
     # section: 802-11-wireless
@@ -89,6 +101,14 @@ define networkmanager::wifi (
       value   => $key_mgmt,
     }
 
+    if ($wpa_psk) {
+      ini_setting { "${name}/802-11-wireless-security/psk":
+        section => '802-11-wireless-security',
+        setting => 'psk',
+        value   => $wpa_psk,
+      }
+    }
+
     ini_setting { "${name}/802-11-wireless-security/auth-alg":
       section => '802-11-wireless-security',
       setting => 'auth-alg',
@@ -109,40 +129,48 @@ define networkmanager::wifi (
       value   => $ipv6_method,
     }
 
+    ini_setting { "${name}/ipv6/addr-gen-mode":
+      section => 'ipv6',
+      setting => 'addr-gen-mode',
+      value   => $ipv6_addr_gen_mode,
+    }
+
     # section: 802-1x
-    ini_setting { "${name}/802-1x/eap":
-      section => '802-1x',
-      setting => 'eap',
-      value   => "${eap};",
-    }
+    if ($eap) {
+      ini_setting { "${name}/802-1x/eap":
+        section => '802-1x',
+        setting => 'eap',
+        value   => "${eap};",
+      }
 
-    ini_setting { "${name}/802-1x/identity":
-      section => '802-1x',
-      setting => 'identity',
-      value   => $user,
-    }
+      ini_setting { "${name}/802-1x/identity":
+        section => '802-1x',
+        setting => 'identity',
+        value   => $user,
+      }
 
-    ini_setting { "${name}/802-1x/phase2-auth":
-      section => '802-1x',
-      setting => 'phase2-auth',
-      value   => $phase2_auth,
-    }
+      ini_setting { "${name}/802-1x/phase2-auth":
+        section => '802-1x',
+        setting => 'phase2-auth',
+        value   => $phase2_auth,
+      }
 
-    ini_setting { "${name}/802-1x/password-raw-flags":
-      section => '802-1x',
-      setting => 'password-raw-flags',
-      value   => $password_raw_flags,
-    }
+      ini_setting { "${name}/802-1x/password-raw-flags":
+        section => '802-1x',
+        setting => 'password-raw-flags',
+        value   => $password_raw_flags,
+      }
 
-    ini_setting { "${name}/802-1x/nma-ca-cert-ignore":
-      section => '802-1x',
-      setting => 'nma-ca-cert-ignore',
-      value   => $nma_ca_cert_ignore,
+      ini_setting { "${name}/802-1x/nma-ca-cert-ignore":
+        section => '802-1x',
+        setting => 'nma-ca-cert-ignore',
+        value   => $nma_ca_cert_ignore,
+      }
     }
 
   }
 
-  if ( $eap =~ /^tls|^ttls|^peap/ ) {
+  if ( $eap and $eap =~ /^tls|^ttls|^peap/ ) {
     file { "${directory}/org.gnome.nm-applet.eap.${uuid}.gschema.xml":
       ensure  => file,
       content => template('networkmanager/org.gnome.nm-applet.eap.gschema.xml.erb'),
