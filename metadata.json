@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-networkmanager",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "author": "Camptocamp",
   "summary": "Puppet NetworkManager module",
   "license": "Apache-2.0",
@@ -14,7 +14,7 @@
     }
   ],
   "operatingsystem_support": [
-    "Debian based Linux",
+    "Debian based Linux"
   ],
   "requirements": [
     {
